@@ -14,7 +14,7 @@ class OpenAIProvider implements IAIProvider {
     String? baseUrl,
   })  : _model = model,
         _client = AIDioClient(
-          baseUrl: baseUrl ?? 'https://api.openai.com/v1',
+          baseUrl: baseUrl ?? 'https://api.openai.com/v1/',
           headers: {
             'Authorization': 'Bearer $apiKey',
             'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ class OpenAIProvider implements IAIProvider {
   @override
   Future<ChatResponse> sendMessage(ChatRequest request) async {
     final response = await _client.post<Map<String, dynamic>>(
-      '/chat/completions',
+      'chat/completions',
       data: _mapRequest(request),
     );
 
@@ -42,7 +42,7 @@ class OpenAIProvider implements IAIProvider {
   @override
   Stream<ChatStreamChunk> streamResponse(ChatRequest request) async* {
     final response = await _client.post<ResponseBody>(
-      '/chat/completions',
+      'chat/completions',
       data: _mapRequest(request, stream: true),
       options: Options(responseType: ResponseType.stream),
     );

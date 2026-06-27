@@ -21,9 +21,27 @@ A production-ready Flutter package for integrating multiple AI providers (OpenAI
 | :---: | :---: | :---: |
 | <img src="https://raw.githubusercontent.com/yourusername/flutter_ai_chat_kit/main/assets/screenshots/light_mode.png" width="200px"> | <img src="https://raw.githubusercontent.com/yourusername/flutter_ai_chat_kit/main/assets/screenshots/dark_mode.png" width="200px"> | <img src="https://raw.githubusercontent.com/yourusername/flutter_ai_chat_kit/main/assets/screenshots/markdown.png" width="200px"> |
 
-## Quick Start
+## 🚀 Quick Start
 
-### 1. Initialize the Provider
+### 1. Platform Setup
+
+#### Android
+Add the internet permission to your `android/app/src/main/AndroidManifest.xml`:
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    ...
+</manifest>
+```
+
+#### macOS
+If you are developing for macOS, enable network access in `macos/Runner/DebugProfile.entitlements` and `macos/Runner/Release.entitlements`:
+```xml
+<key>com.apple.security.network.client</key>
+<true/>
+```
+
+### 2. Initialize the Provider
 
 ```dart
 final provider = OpenAIProvider(

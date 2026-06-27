@@ -13,7 +13,8 @@ class GeminiProvider implements IAIProvider {
     String? baseUrl,
   })  : _model = model,
         _client = AIDioClient(
-          baseUrl: baseUrl ?? 'https://generativelanguage.googleapis.com/v1beta',
+          baseUrl:
+              baseUrl ?? 'https://generativelanguage.googleapis.com/v1beta/',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -33,7 +34,7 @@ class GeminiProvider implements IAIProvider {
   @override
   Future<ChatResponse> sendMessage(ChatRequest request) async {
     final response = await _client.post<Map<String, dynamic>>(
-      '/models/$_model:generateContent',
+      'models/$_model:generateContent',
       data: _mapRequest(request),
     );
 
@@ -43,7 +44,7 @@ class GeminiProvider implements IAIProvider {
   @override
   Stream<ChatStreamChunk> streamResponse(ChatRequest request) async* {
     final response = await _client.post<ResponseBody>(
-      '/models/$_model:streamGenerateContent',
+      'models/$_model:streamGenerateContent',
       data: _mapRequest(request),
       options: Options(responseType: ResponseType.stream),
       queryParameters: {

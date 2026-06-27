@@ -14,7 +14,7 @@ class AIDioClient {
     Duration? receiveTimeout,
   })  : _dio = Dio(
           BaseOptions(
-            baseUrl: baseUrl,
+            baseUrl: baseUrl.endsWith('/') ? baseUrl : '$baseUrl/',
             headers: headers,
             queryParameters: queryParameters,
             connectTimeout: connectTimeout ?? const Duration(seconds: 30),
@@ -25,7 +25,8 @@ class AIDioClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          _logger?.debug('API Request: ${options.method} ${options.path}');
+          final uri = options.uri;
+          _logger?.debug('API Request: ${options.method} $uri');
           return handler.next(options);
         },
         onResponse: (response, handler) {
