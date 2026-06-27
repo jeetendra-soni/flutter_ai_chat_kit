@@ -1,6 +1,6 @@
 /// A production-ready Flutter package for integrating multiple AI providers
 /// with a unified API.
-library flutter_ai_chat;
+library flutter_ai_chat_kit;
 
 // Exporting Domain Models
 export 'src/domain/models/ai_models.dart';

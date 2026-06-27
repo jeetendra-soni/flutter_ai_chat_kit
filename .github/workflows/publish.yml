@@ -1,0 +1,32 @@
+name: Publish to Pub.dev
+
+on:
+  push:
+    branches:
+      - main # Or 'master'
+
+jobs:
+  publish:
+    permissions:
+      id-token: write # Required for authentication via OIDC
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Static Analysis
+        run: flutter analyze
+
+      - name: Run Tests
+        run: flutter test
+
+      - name: Publish to Pub.dev
+        run: flutter pub publish --force
