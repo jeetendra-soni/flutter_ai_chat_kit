@@ -960,7 +960,7 @@ mixin _$ChatResponse {
   String? get finishReason => throw _privateConstructorUsedError;
 
   /// The raw response from the provider.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+// @JsonKey(includeFromJson: false, includeToJson: false)
   Object? get rawResponse => throw _privateConstructorUsedError;
 
   /// Serializes this ChatResponse to a JSON map.
@@ -983,7 +983,6 @@ abstract class $ChatResponseCopyWith<$Res> {
       {ChatMessage message,
       ChatUsage? usage,
       String? finishReason,
-      @JsonKey(includeFromJson: false, includeToJson: false)
       Object? rawResponse});
 
   $ChatMessageCopyWith<$Res> get message;
@@ -1064,7 +1063,6 @@ abstract class _$$ChatResponseImplCopyWith<$Res>
       {ChatMessage message,
       ChatUsage? usage,
       String? finishReason,
-      @JsonKey(includeFromJson: false, includeToJson: false)
       Object? rawResponse});
 
   @override
@@ -1113,10 +1111,7 @@ class __$$ChatResponseImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ChatResponseImpl implements _ChatResponse {
   const _$ChatResponseImpl(
-      {required this.message,
-      this.usage,
-      this.finishReason,
-      @JsonKey(includeFromJson: false, includeToJson: false) this.rawResponse});
+      {required this.message, this.usage, this.finishReason, this.rawResponse});
 
   factory _$ChatResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatResponseImplFromJson(json);
@@ -1134,8 +1129,8 @@ class _$ChatResponseImpl implements _ChatResponse {
   final String? finishReason;
 
   /// The raw response from the provider.
+// @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
   final Object? rawResponse;
 
   @override
@@ -1182,7 +1177,6 @@ abstract class _ChatResponse implements ChatResponse {
       {required final ChatMessage message,
       final ChatUsage? usage,
       final String? finishReason,
-      @JsonKey(includeFromJson: false, includeToJson: false)
       final Object? rawResponse}) = _$ChatResponseImpl;
 
   factory _ChatResponse.fromJson(Map<String, dynamic> json) =
@@ -1201,8 +1195,8 @@ abstract class _ChatResponse implements ChatResponse {
   String? get finishReason;
 
   /// The raw response from the provider.
+// @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
   Object? get rawResponse;
 
   /// Create a copy of ChatResponse

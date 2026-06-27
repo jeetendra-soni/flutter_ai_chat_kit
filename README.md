@@ -51,7 +51,7 @@ AIChatView(
 ## Supported Providers
 
 - [x] OpenAI
-- [ ] Gemini (Coming Soon)
+- [x] Gemini
 - [ ] Claude (Coming Soon)
 - [ ] Ollama (Coming Soon)
 - [ ] DeepSeek (Coming Soon)

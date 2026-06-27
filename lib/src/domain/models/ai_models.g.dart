@@ -89,6 +89,7 @@ _$ChatResponseImpl _$$ChatResponseImplFromJson(Map<String, dynamic> json) =>
           ? null
           : ChatUsage.fromJson(json['usage'] as Map<String, dynamic>),
       finishReason: json['finishReason'] as String?,
+      rawResponse: json['rawResponse'],
     );
 
 Map<String, dynamic> _$$ChatResponseImplToJson(_$ChatResponseImpl instance) =>
@@ -96,6 +97,7 @@ Map<String, dynamic> _$$ChatResponseImplToJson(_$ChatResponseImpl instance) =>
       'message': instance.message,
       'usage': instance.usage,
       'finishReason': instance.finishReason,
+      'rawResponse': instance.rawResponse,
     };
 
 _$ChatStreamChunkImpl _$$ChatStreamChunkImplFromJson(
