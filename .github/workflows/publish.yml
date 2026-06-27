@@ -3,7 +3,7 @@ name: Publish to Pub.dev
 on:
   push:
     branches:
-      - main # Or 'master'
+      - main
 
 jobs:
   publish:
