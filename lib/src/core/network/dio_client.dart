@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
-import '../exceptions/ai_exception.dart';
-import '../logging/logger_interface.dart';
+import 'package:flutter_ai_chat_kit/src/core/exceptions/ai_exception.dart';
+import 'package:flutter_ai_chat_kit/src/core/logging/logger_interface.dart';
 
 /// A wrapper around [Dio] for making API requests to AI providers.
 class AIDioClient {
-  final Dio _dio;
-  final IAILogger? _logger;
 
   AIDioClient({
     required String baseUrl,
@@ -41,6 +39,8 @@ class AIDioClient {
       ),
     );
   }
+  final Dio _dio;
+  final IAILogger? _logger;
 
   /// Sends a POST request.
   Future<Response<T>> post<T>(
@@ -72,9 +72,11 @@ class AIDioClient {
     final data = e.response?.data;
 
     if (statusCode == 401) {
-      return AuthenticationException('Invalid API Key', code: '401', details: data);
+      return AuthenticationException('Invalid API Key',
+          code: '401', details: data,);
     } else if (statusCode == 429) {
-      return RateLimitException('Rate limit exceeded', code: '429', details: data);
+      return RateLimitException('Rate limit exceeded',
+          code: '429', details: data,);
     } else if (e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.receiveTimeout) {
       return TimeoutException('Request timed out', details: data);
@@ -82,6 +84,7 @@ class AIDioClient {
       return CancelledException('Request cancelled');
     }
 
-    return NetworkException(message, code: statusCode?.toString(), details: data);
+    return NetworkException(message,
+        code: statusCode?.toString(), details: data,);
   }
 }

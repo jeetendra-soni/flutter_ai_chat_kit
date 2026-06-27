@@ -1,20 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import '../../../core/network/dio_client.dart';
-import '../../../domain/models/ai_models.dart';
-import '../../../domain/providers/ai_provider.dart';
+import 'package:flutter_ai_chat_kit/src/core/network/dio_client.dart';
+import 'package:flutter_ai_chat_kit/src/domain/models/ai_models.dart';
+import 'package:flutter_ai_chat_kit/src/domain/providers/ai_provider.dart';
 
 /// Implementation of [IAIProvider] for Anthropic Claude.
 class ClaudeProvider implements IAIProvider {
-  final AIDioClient _client;
-  final String _model;
-
-  @override
-  String get providerId => 'anthropic';
-
-  @override
-  String get model => _model;
 
   ClaudeProvider({
     required String apiKey,
@@ -30,10 +22,18 @@ class ClaudeProvider implements IAIProvider {
             'content-type': 'application/json',
           },
         );
+  final AIDioClient _client;
+  final String _model;
+
+  @override
+  String get providerId => 'anthropic';
+
+  @override
+  String get model => _model;
 
   @override
   Future<ChatResponse> sendMessage(ChatRequest request) async {
-    final response = await _client.post(
+    final response = await _client.post<Map<String, dynamic>>(
       '/messages',
       data: _mapRequest(request),
     );
@@ -59,7 +59,7 @@ class ClaudeProvider implements IAIProvider {
 
       final jsonStr = line.substring(6);
       if (jsonStr == '[DONE]') break;
-      
+
       final data = jsonDecode(jsonStr);
       final chunk = _mapStreamChunk(data);
       if (chunk != null) yield chunk;
@@ -78,7 +78,7 @@ class ClaudeProvider implements IAIProvider {
           .map((m) => {
                 'role': m.role == ChatRole.user ? 'user' : 'assistant',
                 'content': m.content,
-              })
+              },)
           .toList(),
       if (request.systemPrompt != null) 'system': request.systemPrompt,
       'max_tokens': request.parameters.maxTokens ?? 1024,
@@ -89,8 +89,10 @@ class ClaudeProvider implements IAIProvider {
   }
 
   ChatResponse _mapResponse(dynamic data) {
-    final content = data['content'] as List;
-    final text = content.isNotEmpty ? content[0]['text'] as String : '';
+    final responseData = data as Map<String, dynamic>;
+    final content = responseData['content'] as List;
+    final text =
+        content.isNotEmpty ? (content[0] as Map)['text'] as String : '';
 
     return ChatResponse(
       message: ChatMessage(
@@ -98,30 +100,37 @@ class ClaudeProvider implements IAIProvider {
         content: text,
         timestamp: DateTime.now(),
       ),
-      usage: data['usage'] != null
+      usage: responseData['usage'] != null
           ? ChatUsage(
-              promptTokens: data['usage']['input_tokens'] ?? 0,
-              completionTokens: data['usage']['output_tokens'] ?? 0,
-              totalTokens: (data['usage']['input_tokens'] ?? 0) +
-                  (data['usage']['output_tokens'] ?? 0),
+              promptTokens:
+                  (responseData['usage'] as Map)['input_tokens'] as int? ?? 0,
+              completionTokens:
+                  (responseData['usage'] as Map)['output_tokens'] as int? ?? 0,
+              totalTokens:
+                  ((responseData['usage'] as Map)['input_tokens'] as int? ??
+                          0) +
+                      ((responseData['usage'] as Map)['output_tokens']
+                              as int? ??
+                          0),
             )
           : null,
-      finishReason: data['stop_reason'],
-      rawResponse: data,
+      finishReason: responseData['stop_reason'] as String?,
+      rawResponse: responseData,
     );
   }
 
   ChatStreamChunk? _mapStreamChunk(dynamic data) {
-    final type = data['type'];
-    
+    final chunkData = data as Map<String, dynamic>;
+    final type = chunkData['type'];
+
     if (type == 'content_block_delta') {
       return ChatStreamChunk(
-        content: data['delta']['text'],
+        content: (chunkData['delta'] as Map)['text'] as String?,
       );
     } else if (type == 'message_stop') {
       return const ChatStreamChunk(finishReason: 'stop');
     }
-    
+
     return null;
   }
 }
