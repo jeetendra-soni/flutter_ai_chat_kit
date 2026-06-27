@@ -15,7 +15,7 @@ class ClaudeProvider implements IAIProvider {
     String apiVersion = '2023-06-01',
   })  : _model = model,
         _client = AIDioClient(
-          baseUrl: baseUrl ?? 'https://api.anthropic.com/v1',
+          baseUrl: baseUrl ?? 'https://api.anthropic.com/v1/',
           headers: {
             'x-api-key': apiKey,
             'anthropic-version': apiVersion,
@@ -34,7 +34,7 @@ class ClaudeProvider implements IAIProvider {
   @override
   Future<ChatResponse> sendMessage(ChatRequest request) async {
     final response = await _client.post<Map<String, dynamic>>(
-      '/messages',
+      'messages',
       data: _mapRequest(request),
     );
 
@@ -44,7 +44,7 @@ class ClaudeProvider implements IAIProvider {
   @override
   Stream<ChatStreamChunk> streamResponse(ChatRequest request) async* {
     final response = await _client.post<ResponseBody>(
-      '/messages',
+      'messages',
       data: _mapRequest(request, stream: true),
       options: Options(responseType: ResponseType.stream),
     );
