@@ -1,3 +1,9 @@
+## 0.0.4
+
+* **Bug Fix**: Resolved critical URL resolution issue (404 error) across all providers (OpenAI, Gemini, Claude).
+* **Documentation**: Added platform-specific setup instructions for Android and macOS in README.
+* **Code Quality**: Optimized internal networking client for better OIDC detection in CI.
+
 ## 0.0.3
 
 * **Claude Integration**: Added support for Anthropic Claude models (Claude 3.5 Sonnet, etc.).
