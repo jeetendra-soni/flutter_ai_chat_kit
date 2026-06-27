@@ -1,8 +1,8 @@
-import '../models/ai_models.dart';
-import '../providers/ai_provider.dart';
+import 'package:flutter_ai_chat_kit/src/domain/models/ai_models.dart';
+import 'package:flutter_ai_chat_kit/src/domain/providers/ai_provider.dart';
 
 /// Interface for the Chat Repository.
-/// 
+///
 /// The repository orchestrates communication between providers,
 /// caching mechanisms, and persistence.
 abstract class IChatRepository {

@@ -1,20 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import '../../../core/network/dio_client.dart';
-import '../../../domain/models/ai_models.dart';
-import '../../../domain/providers/ai_provider.dart';
+import 'package:flutter_ai_chat_kit/src/core/network/dio_client.dart';
+import 'package:flutter_ai_chat_kit/src/domain/models/ai_models.dart';
+import 'package:flutter_ai_chat_kit/src/domain/providers/ai_provider.dart';
 
 /// Implementation of [IAIProvider] for OpenAI.
 class OpenAIProvider implements IAIProvider {
-  final AIDioClient _client;
-  final String _model;
-
-  @override
-  String get providerId => 'openai';
-
-  @override
-  String get model => _model;
 
   OpenAIProvider({
     required String apiKey,
@@ -28,10 +20,18 @@ class OpenAIProvider implements IAIProvider {
             'Content-Type': 'application/json',
           },
         );
+  final AIDioClient _client;
+  final String _model;
+
+  @override
+  String get providerId => 'openai';
+
+  @override
+  String get model => _model;
 
   @override
   Future<ChatResponse> sendMessage(ChatRequest request) async {
-    final response = await _client.post(
+    final response = await _client.post<Map<String, dynamic>>(
       '/chat/completions',
       data: _mapRequest(request),
     );
@@ -75,7 +75,7 @@ class OpenAIProvider implements IAIProvider {
           .map((m) => {
                 'role': m.role.name,
                 'content': m.content,
-              })
+              },)
           .toList(),
       'temperature': request.parameters.temperature,
       'top_p': request.parameters.topP,
@@ -85,34 +85,37 @@ class OpenAIProvider implements IAIProvider {
   }
 
   ChatResponse _mapResponse(dynamic data) {
-    final choice = data['choices'][0];
-    final message = choice['message'];
+    final responseData = data as Map<String, dynamic>;
+    final choice = (responseData['choices'] as List)[0] as Map;
+    final message = choice['message'] as Map;
 
     return ChatResponse(
       message: ChatMessage(
-        role: ChatRole.values.byName(message['role']),
-        content: message['content'],
+        role: ChatRole.values.byName(message['role'] as String),
+        content: message['content'] as String,
         timestamp: DateTime.now(),
       ),
-      usage: data['usage'] != null
+      usage: responseData['usage'] != null
           ? ChatUsage(
-              promptTokens: data['usage']['prompt_tokens'],
-              completionTokens: data['usage']['completion_tokens'],
-              totalTokens: data['usage']['total_tokens'],
+              promptTokens: (responseData['usage'] as Map)['prompt_tokens'] as int? ?? 0,
+              completionTokens:
+                  (responseData['usage'] as Map)['completion_tokens'] as int? ?? 0,
+              totalTokens: (responseData['usage'] as Map)['total_tokens'] as int? ?? 0,
             )
           : null,
-      finishReason: choice['finish_reason'],
-      rawResponse: data,
+      finishReason: choice['finish_reason'] as String?,
+      rawResponse: responseData,
     );
   }
 
   ChatStreamChunk _mapStreamChunk(dynamic data) {
-    final choice = data['choices'][0];
-    final delta = choice['delta'];
+    final chunkData = data as Map<String, dynamic>;
+    final choice = (chunkData['choices'] as List)[0] as Map;
+    final delta = choice['delta'] as Map;
 
     return ChatStreamChunk(
-      content: delta['content'],
-      finishReason: choice['finish_reason'],
+      content: delta['content'] as String?,
+      finishReason: choice['finish_reason'] as String?,
     );
   }
 }

@@ -1,51 +1,43 @@
 /// Base class for all AI package exceptions.
 abstract class AIException implements Exception {
+
+  AIException(this.message, {this.code, this.details});
   final String message;
   final String? code;
   final dynamic details;
-
-  AIException(this.message, {this.code, this.details});
 
   @override
   String toString() => '[$runtimeType] $message (code: $code)';
 }
 
 class AuthenticationException extends AIException {
-  AuthenticationException(String message, {String? code, dynamic details})
-      : super(message, code: code, details: details);
+  AuthenticationException(super.message, {super.code, super.details});
 }
 
 class RateLimitException extends AIException {
-  RateLimitException(String message, {String? code, dynamic details})
-      : super(message, code: code, details: details);
+  RateLimitException(super.message, {super.code, super.details});
 }
 
 class TimeoutException extends AIException {
-  TimeoutException(String message, {String? code, dynamic details})
-      : super(message, code: code, details: details);
+  TimeoutException(super.message, {super.code, super.details});
 }
 
 class NetworkException extends AIException {
-  NetworkException(String message, {String? code, dynamic details})
-      : super(message, code: code, details: details);
+  NetworkException(super.message, {super.code, super.details});
 }
 
 class ProviderException extends AIException {
-  ProviderException(String message, {String? code, dynamic details})
-      : super(message, code: code, details: details);
+  ProviderException(super.message, {super.code, super.details});
 }
 
 class ValidationException extends AIException {
-  ValidationException(String message, {String? code, dynamic details})
-      : super(message, code: code, details: details);
+  ValidationException(super.message, {super.code, super.details});
 }
 
 class CancelledException extends AIException {
-  CancelledException(String message, {String? code, dynamic details})
-      : super(message, code: code, details: details);
+  CancelledException(super.message, {super.code, super.details});
 }
 
 class UnknownException extends AIException {
-  UnknownException(String message, {String? code, dynamic details})
-      : super(message, code: code, details: details);
+  UnknownException(super.message, {super.code, super.details});
 }

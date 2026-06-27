@@ -1,7 +1,9 @@
-import '../models/ai_models.dart';
+import 'package:flutter_ai_chat_kit/flutter_ai_chat_kit.dart' show AIChatController;
+import 'package:flutter_ai_chat_kit/src/domain/models/ai_models.dart';
+import 'package:flutter_ai_chat_kit/src/presentation/controllers/chat_controller.dart' show AIChatController;
 
 /// The abstract base class for all AI providers.
-/// 
+///
 /// Every provider (OpenAI, Gemini, etc.) must implement this interface
 /// to ensure compatibility with the [AIChatController].
 abstract class IAIProvider {
@@ -12,12 +14,12 @@ abstract class IAIProvider {
   String get model;
 
   /// Sends a single message to the AI and returns a [ChatResponse].
-  /// 
+  ///
   /// [request] contains the messages, parameters, and configuration for the call.
   Future<ChatResponse> sendMessage(ChatRequest request);
 
   /// Streams the response from the AI.
-  /// 
+  ///
   /// Returns a [Stream] of [ChatStreamChunk].
   Stream<ChatStreamChunk> streamResponse(ChatRequest request);
 

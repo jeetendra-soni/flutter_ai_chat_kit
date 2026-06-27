@@ -1,5 +1,5 @@
 /// Interface for logging.
-/// 
+///
 /// Allows users to plug in their own logging solution or use the default one.
 abstract class IAILogger {
   /// Logs a debug message.

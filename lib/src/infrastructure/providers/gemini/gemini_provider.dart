@@ -1,21 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import '../../../core/network/dio_client.dart';
-import '../../../domain/models/ai_models.dart';
-import '../../../domain/providers/ai_provider.dart';
+import 'package:flutter_ai_chat_kit/src/core/network/dio_client.dart';
+import 'package:flutter_ai_chat_kit/src/domain/models/ai_models.dart';
+import 'package:flutter_ai_chat_kit/src/domain/providers/ai_provider.dart';
 
 /// Implementation of [IAIProvider] for Google Gemini.
 class GeminiProvider implements IAIProvider {
-  final AIDioClient _client;
-  final String _model;
-
-  @override
-  String get providerId => 'gemini';
-
-  @override
-  String get model => _model;
-
   GeminiProvider({
     required String apiKey,
     String model = 'gemini-1.5-flash',
@@ -30,10 +21,18 @@ class GeminiProvider implements IAIProvider {
             'key': apiKey,
           },
         );
+  final AIDioClient _client;
+  final String _model;
+
+  @override
+  String get providerId => 'gemini';
+
+  @override
+  String get model => _model;
 
   @override
   Future<ChatResponse> sendMessage(ChatRequest request) async {
-    final response = await _client.post(
+    final response = await _client.post<Map<String, dynamic>>(
       '/models/$_model:generateContent',
       data: _mapRequest(request),
     );
@@ -52,10 +51,7 @@ class GeminiProvider implements IAIProvider {
       },
     );
 
-    final stream = response.data!.stream
-        .cast<List<int>>()
-        .transform(utf8.decoder)
-        .transform(const LineSplitter());
+    final stream = response.data!.stream.cast<List<int>>().transform(utf8.decoder).transform(const LineSplitter());
 
     await for (final line in stream) {
       if (line.isEmpty || !line.startsWith('data: ')) continue;
@@ -75,7 +71,7 @@ class GeminiProvider implements IAIProvider {
         return {
           'role': m.role == ChatRole.user ? 'user' : 'model',
           'parts': [
-            {'text': m.content}
+            {'text': m.content},
           ],
         };
       }).toList(),
@@ -88,16 +84,17 @@ class GeminiProvider implements IAIProvider {
       if (request.systemPrompt != null)
         'systemInstruction': {
           'parts': [
-            {'text': request.systemPrompt}
-          ]
+            {'text': request.systemPrompt},
+          ],
         },
     };
   }
 
   ChatResponse _mapResponse(dynamic data) {
-    final candidate = data['candidates'][0];
-    final content = candidate['content'];
-    final text = content['parts'][0]['text'];
+    final responseData = data as Map<String, dynamic>;
+    final candidate = (responseData['candidates'] as List)[0] as Map;
+    final content = candidate['content'] as Map;
+    final text = (content['parts'] as List)[0]['text'] as String;
 
     return ChatResponse(
       message: ChatMessage(
@@ -105,27 +102,28 @@ class GeminiProvider implements IAIProvider {
         content: text,
         timestamp: DateTime.now(),
       ),
-      usage: data['usageMetadata'] != null
+      usage: responseData['usageMetadata'] != null
           ? ChatUsage(
-              promptTokens: data['usageMetadata']['promptTokenCount'] ?? 0,
-              completionTokens: data['usageMetadata']['candidatesTokenCount'] ?? 0,
-              totalTokens: data['usageMetadata']['totalTokenCount'] ?? 0,
+              promptTokens: (responseData['usageMetadata'] as Map)['promptTokenCount'] as int? ?? 0,
+              completionTokens: (responseData['usageMetadata'] as Map)['candidatesTokenCount'] as int? ?? 0,
+              totalTokens: (responseData['usageMetadata'] as Map)['totalTokenCount'] as int? ?? 0,
             )
           : null,
-      finishReason: candidate['finishReason'],
-      rawResponse: data,
+      finishReason: candidate['finishReason'] as String?,
+      rawResponse: responseData,
     );
   }
 
   ChatStreamChunk _mapStreamChunk(dynamic data) {
-    final candidate = data['candidates'][0];
-    final content = candidate['content'];
-    final parts = content != null ? content['parts'] as List : [];
-    final text = parts.isNotEmpty ? parts[0]['text'] as String? : null;
+    final chunkData = data as Map<String, dynamic>;
+    final candidate = (chunkData['candidates'] as List)[0] as Map;
+    final content = candidate['content'] as Map?;
+    final parts = content != null ? content['parts'] as List : <Map<String, dynamic>>[];
+    final text = parts.isNotEmpty ? (parts[0] as Map)['text'] as String? : null;
 
     return ChatStreamChunk(
       content: text,
-      finishReason: candidate['finishReason'],
+      finishReason: candidate['finishReason'] as String?,
     );
   }
 }
