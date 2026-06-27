@@ -1,15 +1,25 @@
-# flutter_ai_chat
+# flutter_ai_chat_kit
 
 A production-ready Flutter package for integrating multiple AI providers (OpenAI, Gemini, Claude, etc.) with a unified API.
 
-## Features
+<p align="center">
+  <img src="https://raw.githubusercontent.com/yourusername/flutter_ai_chat_kit/main/assets/screenshots/chat_demo.gif" width="300px" alt="Chat Demo">
+</p>
 
-- **Unified API**: Switch between AI providers (OpenAI, Gemini, etc.) without changing your UI code.
-- **Streaming Support**: Real-time responses with incremental updates.
-- **Clean Architecture**: Decoupled business logic, repository pattern, and strategy pattern for providers.
-- **Markdown Support**: Built-in markdown rendering for AI responses.
-- **Conversation Persistence**: Easily save and load conversation history.
-- **State Management Agnostic**: Works with Bloc, Riverpod, Provider, or simple ValueNotifiers.
+## ✨ Features
+
+- **🚀 Unified API**: Switch between AI providers (OpenAI, Gemini, etc.) without changing your UI code.
+- **⚡ Streaming Support**: Real-time responses with incremental updates for that "ChatGPT feel".
+- **🏗️ Clean Architecture**: Built with Strategy, Repository, and Controller patterns for maximum extensibility.
+- **📝 Markdown Support**: Built-in rich text rendering for AI responses (code blocks, tables, etc.).
+- **💾 Persistence**: Built-in support for conversation history and local caching.
+- **🎨 Modern UI**: Beautiful Material 3 chat components included out-of-the-box.
+
+## 📸 Screenshots
+
+| Light Mode | Dark Mode | Markdown Support |
+| :---: | :---: | :---: |
+| <img src="https://raw.githubusercontent.com/yourusername/flutter_ai_chat_kit/main/assets/screenshots/light_mode.png" width="200px"> | <img src="https://raw.githubusercontent.com/yourusername/flutter_ai_chat_kit/main/assets/screenshots/dark_mode.png" width="200px"> | <img src="https://raw.githubusercontent.com/yourusername/flutter_ai_chat_kit/main/assets/screenshots/markdown.png" width="200px"> |
 
 ## Quick Start
 
@@ -52,7 +62,7 @@ AIChatView(
 
 - [x] OpenAI
 - [x] Gemini
-- [ ] Claude (Coming Soon)
+- [x] Anthropic Claude
 - [ ] Ollama (Coming Soon)
 - [ ] DeepSeek (Coming Soon)
 
