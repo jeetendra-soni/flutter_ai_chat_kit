@@ -1,3 +1,8 @@
+## 0.0.5
+
+* **Final URL Fix**: Implemented automatic `baseUrl` trailing slash sanitization in `AIDioClient`. This prevents 404 errors when providers or users omit the slash.
+* **Enhanced Logging**: The network client now logs the full request URI (including query parameters) for better debugging.
+
 ## 0.0.4
 
 * **Bug Fix**: Resolved critical URL resolution issue (404 error) across all providers (OpenAI, Gemini, Claude).
