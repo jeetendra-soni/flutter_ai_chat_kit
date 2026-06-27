@@ -10,6 +10,7 @@ export 'src/domain/providers/ai_provider.dart';
 
 // Exporting Infrastructure Providers
 export 'src/infrastructure/providers/openai/openai_provider.dart';
+export 'src/infrastructure/providers/gemini/gemini_provider.dart';
 
 // Exporting Repository
 export 'src/domain/repository/chat_repository_interface.dart';

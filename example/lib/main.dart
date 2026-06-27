@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ai_chat/flutter_ai_chat.dart';
+import 'package:flutter_ai_chat_kit/flutter_ai_chat_kit.dart';
 
 void main() {
   runApp(const MyApp());

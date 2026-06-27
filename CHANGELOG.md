@@ -1,6 +1,6 @@
 ## 0.0.1
 
-* Initial release of `flutter_ai_chat`.
+* Initial release of `flutter_ai_chat_kit`.
 * Unified API for multiple AI providers.
 * Added `OpenAIProvider` with streaming support.
 * Added `AIChatController` for state management.
