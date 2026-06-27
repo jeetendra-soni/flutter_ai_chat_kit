@@ -1,5 +1,5 @@
 /// Interface for caching services.
-/// 
+///
 /// Used for persisting conversation history or other temporary data.
 abstract class ICacheService {
   /// Initializes the cache.

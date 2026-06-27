@@ -1,13 +1,24 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart' show ValueListenableBuilder;
 import 'package:flutter/foundation.dart';
-import '../../domain/models/ai_models.dart';
-import '../../domain/repository/chat_repository_interface.dart';
+import 'package:flutter/material.dart' show ValueListenableBuilder;
+import 'package:flutter/widgets.dart' show ValueListenableBuilder;
+import 'package:flutter_ai_chat_kit/src/domain/models/ai_models.dart';
+import 'package:flutter_ai_chat_kit/src/domain/repository/chat_repository_interface.dart';
 
 /// The main controller for managing AI chat state and actions.
-/// 
+///
 /// This controller is state-management agnostic and can be used with
 /// Bloc, Riverpod, Provider, or simply [ValueListenableBuilder].
 class AIChatController extends ChangeNotifier {
+
+  AIChatController({
+    required IChatRepository repository,
+    String? conversationId,
+  })  : _repository = repository,
+        _conversationId = conversationId ?? 'default' {
+    _loadHistory();
+  }
   final IChatRepository _repository;
   final String _conversationId;
 
@@ -24,21 +35,13 @@ class AIChatController extends ChangeNotifier {
   /// The last error occurred, if any.
   String? get error => _error;
 
-  AIChatController({
-    required IChatRepository repository,
-    String? conversationId,
-  })  : _repository = repository,
-        _conversationId = conversationId ?? 'default' {
-    _loadHistory();
-  }
-
   Future<void> _loadHistory() async {
     _messages = await _repository.getConversationHistory(_conversationId);
     notifyListeners();
   }
 
   /// Sends a message to the AI.
-  /// 
+  ///
   /// Updates the internal [messages] list and notifies listeners.
   Future<void> sendMessage(String content) async {
     if (content.trim().isEmpty) return;
@@ -57,7 +60,7 @@ class AIChatController extends ChangeNotifier {
     try {
       final request = ChatRequest(messages: _messages);
       final response = await _repository.sendMessage(request);
-      
+
       _messages.add(response.message);
       await _repository.saveMessage(_conversationId, userMessage);
       await _repository.saveMessage(_conversationId, response.message);
@@ -70,7 +73,7 @@ class AIChatController extends ChangeNotifier {
   }
 
   /// Sends a message and streams the AI response.
-  /// 
+  ///
   /// Incremental updates are added to the last message in the [messages] list.
   Future<void> streamMessage(String content) async {
     if (content.trim().isEmpty) return;
@@ -82,7 +85,7 @@ class AIChatController extends ChangeNotifier {
     );
 
     _messages.add(userMessage);
-    
+
     // Add an empty assistant message to be populated by the stream
     final assistantMessage = ChatMessage(
       role: ChatRole.assistant,
@@ -90,20 +93,22 @@ class AIChatController extends ChangeNotifier {
       timestamp: DateTime.now(),
     );
     _messages.add(assistantMessage);
-    
+
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      final request = ChatRequest(messages: _messages.sublist(0, _messages.length - 1), stream: true);
+      final request = ChatRequest(
+          messages: _messages.sublist(0, _messages.length - 1), stream: true,);
       final stream = _repository.streamResponse(request);
 
-      String fullContent = '';
+      var fullContent = '';
       await for (final chunk in stream) {
         if (chunk.content != null) {
           fullContent += chunk.content!;
-          _messages[_messages.length - 1] = assistantMessage.copyWith(content: fullContent);
+          _messages[_messages.length - 1] =
+              assistantMessage.copyWith(content: fullContent);
           notifyListeners();
         }
       }

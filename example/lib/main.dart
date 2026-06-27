@@ -34,7 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // 1. Initialize the provider
     final provider = OpenAIProvider(
       apiKey: 'YOUR_OPENAI_API_KEY', // Replace with your key

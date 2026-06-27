@@ -1,36 +1,36 @@
 name: flutter_ai_chat_kit
 description: A production-ready Flutter package for integrating multiple AI providers (OpenAI, Gemini, Claude, etc.) with a unified API.
 version: 0.0.3
-homepage: https://github.com/yourusername/flutter_ai_chat
+homepage: https://github.com/yourusername/flutter_ai_chat_kit
 
 environment:
   sdk: ^3.0.0
   flutter: ">=3.10.0"
 
 dependencies:
+  collection: ^1.18.0
+  dio: ^5.4.0
   flutter:
     sdk: flutter
-  dio: ^5.4.0
+  flutter_markdown: ^0.6.18
   freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
-  path_provider: ^2.1.2
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  http: ^1.2.0
+  json_annotation: ^4.8.1
   logging: ^1.2.0
   markdown_widget: ^2.3.1
-  flutter_markdown: ^0.6.18
-  collection: ^1.18.0
+  path_provider: ^2.1.2
   uuid: ^4.3.3
-  http: ^1.2.0
 
 dev_dependencies:
+  build_runner: ^2.4.8
   flutter_test:
     sdk: flutter
-  very_good_analysis: ^5.1.0
-  build_runner: ^2.4.8
   freezed: ^2.4.7
   json_serializable: ^6.7.1
   mocktail: ^1.0.3
+  very_good_analysis: ^5.1.0
 
 flutter:
   uses-material-design: true
